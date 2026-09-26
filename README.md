@@ -1,81 +1,52 @@
-# Salesforce-AI-Loan-Processing-Assistant
 # AI-Powered Loan Processing Assistant
 
-## Overview
+An AI-powered loan processing solution built on Salesforce to streamline loan application intake, workflow automation, and application monitoring.
 
-An AI-powered loan processing solution built on Salesforce to streamline
-loan application intake, automation, and monitoring using Agentforce,
-Salesforce Flow, Lightning App Builder, and Lightning Web Components.
+The project combines Salesforce Platform capabilities with Agentforce, Flow Builder, Lightning Web Components, Dynamic Forms, Reports, and Dashboards to create a structured loan processing experience.
 
-## Problem
+---
 
-Traditional loan processing can involve repetitive data entry,
-manual workflows, and inconsistent information collection.
+## Project Overview
+
+Traditional loan processing can involve repetitive data entry, manual workflow steps, and inconsistent information collection.
+
+This project addresses these challenges by creating a Salesforce-based loan processing assistant that helps users collect loan application information, automate business processes, visualize application progress, and monitor application data.
+
+---
 
 ## Solution
 
-The solution provides a Salesforce-based loan processing experience
-that combines Agentforce conversational assistance with automated
-Salesforce Flows, structured loan application records, dynamic UI,
-custom LWC functionality, and reporting dashboards.
+The solution provides a custom Salesforce application called **Loan Processing Assistant**.
 
-## Key Features
+The application includes:
 
-- Agentforce Loan Assistant
-- Automated loan application creation
-- Salesforce Screen Flows
-- Record-Triggered Flow automation
-- Dynamic Forms and Visibility
+- Agentforce-powered loan assistance
+- Structured loan application intake
+- Salesforce Flow automation
+- Dynamic record page experience
 - Custom Lightning Web Component
-- Loan application reports
-- Executive dashboard
+- Reports and dashboards
 - Security and field-level access controls
-- UAT and testing
+- User acceptance testing
+
+---
 
 ## Architecture
 
-Agentforce
-    ↓
-Agent Action
-    ↓
-Salesforce Flow
-    ↓
-Loan Application
-    ↓
-Automation
-    ↓
-Reports & Dashboard
-
-## Salesforce Technologies
-
-- Salesforce Platform
-- Agentforce
-- Flow Builder
-- Lightning App Builder
-- Dynamic Forms
-- Dynamic Visibility
-- Lightning Web Components
-- Reports & Dashboards
-- Salesforce Security
-- Einstein Trust Layer
-
-## Screenshots
-
-[Add screenshots here]
-
-## Project Demo
-
-[Add demo video/link here]
-
-## Project Documentation
-
-[Add presentation/documentation here]
-
-## What I Learned
-
-- Designing Salesforce data models
-- Building Agentforce topics and actions
-- Integrating Agentforce with Flow
-- Building custom Lightning Web Components
-- Designing dynamic Salesforce interfaces
-- Testing and securing Salesforce applications
+```text
+                    Agentforce
+                         │
+                         ▼
+                  Agent Actions
+                         │
+                         ▼
+                  Salesforce Flow
+                         │
+                         ▼
+                Loan Application
+                 /      |       \
+                /       |        \
+        Automation     LWC     Reporting
+                              │
+                              ▼
+                           Dashboard
