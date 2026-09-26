@@ -33,6 +33,7 @@ The application includes:
 
 ## Architecture
 
+
 ```text
                     Agentforce
                          │
