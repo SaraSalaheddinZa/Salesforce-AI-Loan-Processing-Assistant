@@ -142,3 +142,4 @@ The agent uses Salesforce actions and Flow integration to interact with loan app
 **Loan Processing Overview**
 
 Provides a visual overview of loan application activity using Salesforce reports and dashboard components.
+---
