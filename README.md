@@ -1,197 +1,100 @@
 # AI-Powered Loan Processing Assistant
 
-A Salesforce-based loan processing solution that combines **Agentforce, Salesforce Flow, Lightning Web Components, Dynamic Forms, automation, reports, and dashboards** to create a structured digital experience for managing loan applications.
+A Salesforce-based loan processing application that combines **Agentforce, Salesforce Flow, Lightning Web Components, Dynamic Forms, automation, and analytics** to create a more structured and efficient loan application workflow.
 
-The project demonstrates how Salesforce platform capabilities and conversational AI can work together to support loan application intake, automate business processes, track application progress, and provide operational visibility.
+The solution provides a centralized workspace for managing loan applications, collecting applicant information, automating workflow steps, tracking application progress, and interacting with loan data through an Agentforce assistant.
 
 ---
 
-## Project Overview
+## Overview
 
-Traditional loan processing can involve repetitive data entry, manual workflow steps, inconsistent information collection, and limited visibility into application progress.
+Loan processing often involves repetitive data entry, manual status updates, and information spread across multiple steps of the process.
 
-The **AI-Powered Loan Processing Assistant** was developed as a Salesforce solution to demonstrate a more structured and automated loan processing experience.
+The **AI-Powered Loan Processing Assistant** brings these activities into a single Salesforce application.
 
-The system provides:
+The solution combines conversational assistance with Salesforce automation so that loan information can move from user interaction to structured Salesforce records and operational workflows.
 
+### Key Capabilities
+
+- Agentforce-powered loan assistance
 - Guided loan application intake
-- Agentforce-powered assistance
-- Automated Salesforce workflows
-- Dynamic Lightning record experiences
-- Custom application progress tracking
-- Validation and data protection
-- Reports and dashboard monitoring
+- Automated loan application creation
+- Record-triggered business process automation
+- Dynamic Lightning record experience
+- Custom loan progress tracking
+- Data validation and protection
+- Loan reporting and dashboard analytics
 
 ---
 
-## Solution Architecture
+## Architecture
 
 ```text
-                     Agentforce
-                         │
-                         ▼
-                  Agent Actions
-                         │
-                         ▼
-              Salesforce Flow Layer
-                  /             \
-                 /               \
-        Screen Flow        Autolaunched Flow
-                 \               /
-                  \             /
-                   ▼           ▼
-                  Loan Application
-                  (Custom Object)
-                        │
-          ┌─────────────┼─────────────┐
-          ▼             ▼             ▼
-     Automation        LWC         Reporting
-          │             │             │
-          ▼             ▼             ▼
-    Status Update   Progress      Reports &
-                    Tracker       Dashboard
+                         ┌──────────────────────┐
+                         │   Loan Assistant     │
+                         │     Agentforce       │
+                         └──────────┬───────────┘
+                                    │
+                              Agent Actions
+                                    │
+                                    ▼
+                         ┌──────────────────────┐
+                         │   Salesforce Flow    │
+                         └──────────┬───────────┘
+                                    │
+                                    ▼
+                         ┌──────────────────────┐
+                         │   Loan Application   │
+                         │ Loan_Application__c  │
+                         └──────────┬───────────┘
+                                    │
+                  ┌─────────────────┼─────────────────┐
+                  │                 │                 │
+                  ▼                 ▼                 ▼
+           Flow Automation    Progress Tracker     Reports
+                                   LWC               │
+                                                     ▼
+                                                  Dashboard
 ```
 
 ---
 
-## Salesforce Components
-
-### Custom Object
-
-**Loan Application (`Loan_Application__c`)**
-
-The central Salesforce object used to store and manage loan application information throughout the application lifecycle.
-
-### Custom Fields
-
-| Field | API Name |
-|---|---|
-| Applicant Name | `Applicant_Name__c` |
-| Contact Email | `Contact_Email__c` |
-| Annual Income | `Annual_Income__c` |
-| Loan Amount | `Loan_Amount__c` |
-| Loan Type | `Loan_Type__c` |
-| Application Status | `Application_Status__c` |
-| Risk Score | `Risk_Score__c` |
-| Employment Status | `Employment_Status__c` |
-
----
-
-## Lightning Application
-
-### Loan Processing Assistant
-
-A custom Salesforce Lightning application that provides a centralized workspace for managing loan applications and accessing related Salesforce functionality.
-
-The application brings together:
-
-- Loan application records
-- Automation
-- Reports
-- Dashboard
-- Custom Lightning components
-
----
-
-## Lightning Record Page
-
-### Loan Application Record Page
-
-A custom Lightning Record Page provides a structured interface for viewing and managing loan application information.
-
-The page uses Salesforce capabilities including:
-
-- Dynamic Forms
-- Conditional field visibility
-- Standard Lightning components
-- Custom Lightning Web Component
-
----
-
-## Lightning Web Component
-
-### `loanProgressTracker`
-
-A custom Lightning Web Component used to visualize the progress of a loan application based on its current application status.
-
-The component is integrated directly into the Loan Application Lightning Record Page.
-
-```text
-Loan Application
-       │
-       ▼
-Application Status
-       │
-       ▼
-loanProgressTracker
-       │
-       ▼
-Visual Progress Indicator
-```
-
-Source:
-
-```text
-force-app/main/default/lwc/loanProgressTracker/
-```
-
----
-
-## Salesforce Flow Automation
-
-The project uses multiple Salesforce Flows for application intake, Agentforce integration, and record automation.
-
-### 1. Create Loan Application Screen Flow
-
-**API Name:** `Create_Loan_Application_Screen_Flow`
-
-A Screen Flow provides a guided interface for creating a new loan application.
-
-The flow collects key information including:
-
-- Applicant name
-- Contact email
-- Requested loan amount
-- Loan type
-
-After the application is created, a confirmation screen displays the created record information.
-
----
-
-### 2. Agentforce Autolaunched Loan Creation Flow
-
-**API Name:** `Agentforce_Autolaunched_Create_Loan_Application1`
-
-An active Autolaunched Flow provides an automation layer that can receive loan application information and create a `Loan_Application__c` record.
-
-The flow exposes input variables for applicant information and returns the created Loan Application record ID as an output.
-
----
-
-### 3. High-Value Loan Status Automation
-
-**API Name:** `Loan_Application_Auto_Update_High_Value_Status`
-
-A Record-Triggered Flow automatically processes high-value loan applications.
-
-The configured automation evaluates applications with a loan amount of **100,000 or greater** and updates qualifying applications to the **In Review** stage according to the configured status logic.
-
-This demonstrates Salesforce record-triggered automation for implementing business rules without custom Apex code.
-
----
-
-## Agentforce Integration
+## Agentforce
 
 ### Loan Assistant Agent
 
-The project includes an Agentforce configuration represented in Salesforce metadata as:
+The project includes a custom **Loan Assistant Agent** built with Salesforce Agentforce.
 
-`Loan_Assistant_Agent_v1`
+The assistant provides a conversational layer over the loan processing workflow and connects user interactions with Salesforce automation.
 
-The Agentforce metadata is stored directly in the Salesforce DX project:
+It supports loan-processing interactions such as:
+
+- Collecting applicant information
+- Guiding users through loan application interactions
+- Working with loan amount and loan type information
+- Supporting application creation through Salesforce automation
+- Retrieving information related to loan applications
+
+Agentforce connects to Salesforce Flow so conversational input can be passed into structured business automation.
 
 ```text
-force-app/main/default/genAiPlannerBundles/
+User
+  ↓
+Loan Assistant Agent
+  ↓
+Agent Action
+  ↓
+Autolaunched Flow
+  ↓
+Loan Application Record
+```
+
+### Agentforce Metadata
+
+The Salesforce DX project includes the retrieved Agentforce planner bundle:
+
+```text
+genAiPlannerBundles/
 └── Loan_Assistant_Agent_v1/
     ├── agentGraph/
     ├── agentScript/
@@ -199,165 +102,237 @@ force-app/main/default/genAiPlannerBundles/
     └── Loan_Assistant_Agent_v1.genAiPlannerBundle
 ```
 
-The agent is designed to support conversational interaction around the loan application process and works with Salesforce automation to support structured application handling.
-
-The retrieved Agentforce metadata includes the agent graph, agent definition, and local action configuration.
+This keeps the Agentforce configuration alongside the rest of the Salesforce project source.
 
 ---
 
-## Validation and Data Protection
+## Loan Application Data Model
 
-### Prevent Manual Risk Score Edit
+The solution is centered around the custom Salesforce object:
 
-**Validation Rule:** `Prevent_Manual_Risk_Score_Edit`
+### `Loan_Application__c`
 
-The project includes a Salesforce Validation Rule designed to protect the Risk Score field from unauthorized manual modification.
+| Field | API Name | Type |
+|---|---|---|
+| Applicant Name | `Applicant_Name__c` | Text |
+| Contact Email | `Contact_Email__c` | Email |
+| Annual Income | `Annual_Income__c` | Currency |
+| Loan Amount | `Loan_Amount__c` | Currency |
+| Loan Type | `Loan_Type__c` | Picklist |
+| Application Status | `Application_Status__c` | Picklist |
+| Risk Score | `Risk_Score__c` | Number |
+| Employment Status | `Employment_Status__c` | Picklist |
 
-This demonstrates the use of declarative Salesforce controls to protect important application data and enforce data integrity.
-
----
-
-## Reports
-
-The solution includes Salesforce reports for monitoring loan application activity.
-
-### Loan Applications by Loan Type
-
-Provides visibility into loan applications grouped by loan type and includes loan amount information for analysis.
-
-### New Loan Applications Report
-
-Provides visibility into newly created loan applications for operational monitoring.
-
-Report metadata is included in:
-
-```text
-force-app/main/default/reports/
-```
+The object acts as the central record for the loan processing workflow.
 
 ---
 
-## Dashboard
+## Salesforce Automation
 
-### Loan Processing Overview
+Three Salesforce Flows support the core workflow.
 
-A Salesforce dashboard provides a visual overview of loan application activity using the project's reporting data.
+### Create Loan Application Screen Flow
 
-Dashboard metadata is included in:
+`Create_Loan_Application_Screen_Flow`
 
-```text
-force-app/main/default/dashboards/
-```
+Provides a guided loan application form for collecting applicant information and creating a new Loan Application record.
 
----
+The flow collects:
 
-## Salesforce DX Project Structure
+- Applicant name
+- Contact email
+- Requested loan amount
+- Loan type
 
-```text
-force-app/
-└── main/
-    └── default/
-        ├── applications/
-        │   └── Loan_Processing_Assistant.app-meta.xml
-        │
-        ├── dashboards/
-        │   └── PublicDashboards/
-        │
-        ├── flexipages/
-        │   ├── Loan_Application_Record_Page.flexipage-meta.xml
-        │   └── Loan_Processing_Assistant_UtilityBar.flexipage-meta.xml
-        │
-        ├── flows/
-        │   ├── Agentforce_Autolaunched_Create_Loan_Application1.flow-meta.xml
-        │   ├── Create_Loan_Application_Screen_Flow.flow-meta.xml
-        │   └── Loan_Application_Auto_Update_High_Value_Status.flow-meta.xml
-        │
-        ├── genAiPlannerBundles/
-        │   └── Loan_Assistant_Agent_v1/
-        │
-        ├── lwc/
-        │   └── loanProgressTracker/
-        │
-        ├── objects/
-        │   └── Loan_Application__c/
-        │
-        └── reports/
-            └── unfiled$public/
-```
+After creation, the flow displays a confirmation screen with information about the newly created record.
+
+### Agentforce Loan Creation Flow
+
+`Agentforce_Autolaunched_Create_Loan_Application1`
+
+An autolaunched Flow used as part of the Agentforce integration.
+
+It accepts loan application information as Flow inputs, creates the Salesforce record, and exposes the created record ID as an output.
+
+### High-Value Application Automation
+
+`Loan_Application_Auto_Update_High_Value_Status`
+
+A record-triggered Flow monitors Loan Application records.
+
+Applications with a loan amount of **100,000 or greater** are processed through the configured workflow and moved to **In Review** according to the Flow's status logic.
 
 ---
 
-## Technologies and Salesforce Features
+## Lightning Experience
 
-- Salesforce Platform
-- Agentforce
-- Salesforce Flow Builder
-- Lightning App Builder
-- Lightning Web Components (LWC)
+The project includes a custom Lightning application:
+
+### Loan Processing Assistant
+
+The application provides a dedicated Salesforce workspace for loan processing activities.
+
+A custom **Loan Application Record Page** organizes applicant, financial, and loan information using Salesforce Lightning capabilities including:
+
 - Dynamic Forms
 - Dynamic Visibility
-- Custom Objects and Fields
-- Validation Rules
-- Salesforce Reports
-- Salesforce Dashboards
-- Salesforce DX
-- Salesforce CLI
-- Visual Studio Code
+- Standard Lightning components
+- Custom Lightning Web Component
+
+---
+
+## Loan Progress Tracker
+
+`loanProgressTracker`
+
+A custom Lightning Web Component displays the current progress of a loan application using its application status.
+
+The component is embedded directly into the Loan Application Record Page, giving users a visual representation of where an application is in the workflow.
+
+```text
+Loan Record
+    ↓
+Application Status
+    ↓
+loanProgressTracker
+    ↓
+Visual Application Progress
+```
+
+---
+
+## Data Protection
+
+The project includes the validation rule:
+
+`Prevent_Manual_Risk_Score_Edit`
+
+The rule protects the Risk Score field from unauthorized manual modification and demonstrates the use of Salesforce declarative controls for maintaining data integrity.
+
+Additional Salesforce access controls are used to manage access to application data.
+
+---
+
+## Reports & Dashboard
+
+The application includes reporting for monitoring loan activity.
+
+### Reports
+
+**Loan Applications by Loan Type**
+
+Groups loan applications by loan type and provides visibility into associated loan amounts.
+
+**New Loan Applications Report**
+
+Provides visibility into newly created loan applications.
+
+### Dashboard
+
+**Loan Processing Overview**
+
+Provides a visual overview of loan application activity using Salesforce reporting data.
 
 ---
 
 ## Testing
 
-The solution was tested across the main application workflows, including:
+The solution was tested across the main application workflow, including:
 
-- Loan application creation through the Screen Flow
-- Loan record creation and storage
-- Application status automation
-- Loan progress visualization through the custom LWC
-- Agentforce interaction with loan application functionality
-- Report generation and application monitoring
+- Creating Loan Application records
+- Screen Flow execution
+- Automated status updates
+- Agentforce interactions
+- Agentforce and Flow integration
+- Loan progress tracking
+- Reports and dashboard functionality
 
-Testing was performed using sample loan application records in the Salesforce development environment.
+Testing was performed using sample Loan Application records in the Salesforce development environment.
 
 ---
 
-## Project Scope
+## Technology Stack
 
-This project is a demonstration and learning implementation of a Salesforce-based loan processing workflow.
+| Technology | Usage |
+|---|---|
+| Salesforce Platform | Core application platform |
+| Agentforce | Conversational loan assistant |
+| Salesforce Flow | Workflow and process automation |
+| Lightning App Builder | Application and record page design |
+| Dynamic Forms | Dynamic record experience |
+| Lightning Web Components | Custom progress tracker |
+| Salesforce Reports | Loan application analysis |
+| Salesforce Dashboards | Operational visualization |
+| Salesforce DX | Source-driven project structure |
+| Salesforce CLI | Metadata retrieval and development |
+| Git / GitHub | Version control and project repository |
 
-It focuses on:
+---
 
-- Structured application intake
-- Salesforce automation
-- Agentforce integration
-- User experience
-- Application monitoring
-- Declarative platform capabilities
+## Project Structure
 
-The current implementation does **not** integrate with external credit bureaus, banking systems, or production lending decision engines.
+```text
+force-app/main/default/
+│
+├── applications/
+│   └── Loan_Processing_Assistant.app-meta.xml
+│
+├── dashboards/
+│   └── PublicDashboards/
+│
+├── flexipages/
+│   ├── Loan_Application_Record_Page.flexipage-meta.xml
+│   └── Loan_Processing_Assistant_UtilityBar.flexipage-meta.xml
+│
+├── flows/
+│   ├── Agentforce_Autolaunched_Create_Loan_Application1.flow-meta.xml
+│   ├── Create_Loan_Application_Screen_Flow.flow-meta.xml
+│   └── Loan_Application_Auto_Update_High_Value_Status.flow-meta.xml
+│
+├── genAiPlannerBundles/
+│   └── Loan_Assistant_Agent_v1/
+│
+├── lwc/
+│   └── loanProgressTracker/
+│
+├── objects/
+│   └── Loan_Application__c/
+│
+└── reports/
+    └── unfiled$public/
+```
 
-The solution is not intended to autonomously make real-world lending decisions. Any consequential lending decision would require appropriate human review, governance, security controls, and regulatory compliance.
+---
+
+## Responsible AI & Project Scope
+
+Agentforce is used to support interaction, information collection, and Salesforce workflow automation.
+
+The current implementation does not connect to external credit bureaus, production banking systems, or external lending decision engines.
+
+The assistant is not intended to independently make real-world lending decisions. In a production financial environment, consequential lending decisions would require appropriate human oversight, security controls, governance, and regulatory compliance.
+
+Einstein Trust Layer concepts were considered as part of the project's Agentforce and responsible AI design, but the repository does not claim that all Trust Layer capabilities were independently configured in the development environment.
 
 ---
 
 ## Future Enhancements
 
-Potential future improvements include:
+Future versions of the solution could extend the current architecture with:
 
-- External credit bureau integration
+- Credit bureau API integration
 - Document upload and verification
 - Approval workflows
 - Applicant notifications
-- Enhanced risk evaluation models
+- Enhanced risk evaluation
 - Additional Agentforce actions
-- Integration with external banking systems
-- Expanded analytics and reporting
+- Banking system integration
+- Expanded analytics
 
 ---
 
 ## Author
 
-**Sara Salaheddin**
-
+**Sara Salaheddin**  
 Information Technology and Computing  
 Arab Open University
