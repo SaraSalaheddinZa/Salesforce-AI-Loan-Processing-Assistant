@@ -1,0 +1,35 @@
+{
+  "required" : [ "varApplicantName", "varContactEmail", "varLoanAmount", "varLoanType" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "varApplicantName" : {
+      "title" : "varApplicantName",
+      "description" : "The full name of the loan applicant.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "varContactEmail" : {
+      "title" : "varContactEmail",
+      "description" : "The contact email address of the loan applicant.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "varLoanAmount" : {
+      "title" : "varLoanAmount",
+      "description" : "The requested loan amount. Must be a positive number.",
+      "lightning:type" : "lightning__numberType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "varLoanType" : {
+      "title" : "varLoanType",
+      "description" : "The requested loan type: Personal, Home, Auto, or Business.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

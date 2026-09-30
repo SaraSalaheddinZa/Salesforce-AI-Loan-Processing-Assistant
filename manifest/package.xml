@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+
+    <!-- Loan Application Data Model -->
+    <types>
+        <members>Loan_Application__c</members>
+        <name>CustomObject</name>
+    </types>
+
+    <!-- Loan Processing Lightning App -->
+    <types>
+        <members>Loan_Processing_Assistant</members>
+        <name>CustomApplication</name>
+    </types>
+
+    <!-- Lightning Pages -->
+    <types>
+        <members>Loan_Application_Record_Page</members>
+        <members>Loan_Processing_Assistant_UtilityBar</members>
+        <name>FlexiPage</name>
+    </types>
+
+    <!-- Custom Lightning Web Component -->
+    <types>
+        <members>loanProgressTracker</members>
+        <name>LightningComponentBundle</name>
+    </types>
+
+    <!-- Salesforce Flows -->
+    <types>
+        <members>Create_Loan_Application_Screen_Flow</members>
+        <members>Agentforce_Autolaunched_Create_Loan_Application1</members>
+        <members>Loan_Application_Auto_Update_High_Value_Status</members>
+        <name>Flow</name>
+    </types>
+
+    <!-- Reports -->
+    <types>
+        <members>unfiled$public/Loan_Applications_by_Loan_Type_0KE</members>
+        <members>unfiled$public/New_Loan_Applications_Report_nBu</members>
+        <name>Report</name>
+    </types>
+
+    <!-- Dashboard -->
+    <types>
+        <members>unfiled$public/WOwFqzxAxdwebkXMWFUhIMhEiRAzLw1</members>
+        <name>Dashboard</name>
+    </types>
+
+    <!-- Agentforce -->
+    <types>
+        <members>Loan_Assistant_Agent_v1</members>
+        <name>GenAiPlannerBundle</name>
+    </types>
+
+    <version>67.0</version>
+
+</Package>

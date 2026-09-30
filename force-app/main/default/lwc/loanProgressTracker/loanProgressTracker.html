@@ -1,0 +1,26 @@
+<template>
+    <lightning-card
+        title="Loan Application Tracking"
+        icon-name="custom:custom17">
+        
+        <div class="slds-m-around_medium">
+            
+            <template if:true={loans}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={loans}
+                    columns={columns}
+                    hide-checkbox-column>
+                </lightning-datatable>
+            </template>
+            
+            <template if:true={error}>
+                <div class="slds-text-color_error slds-p-around_small">
+                    An error occurred while loading the loan application data.
+                    Please verify your access permissions.
+                </div>
+            </template>
+            
+        </div>
+    </lightning-card>
+</template>

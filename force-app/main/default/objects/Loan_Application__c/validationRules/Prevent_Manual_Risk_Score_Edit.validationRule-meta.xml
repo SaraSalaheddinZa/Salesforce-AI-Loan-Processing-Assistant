@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_Manual_Risk_Score_Edit</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISCHANGED(Risk_Score__c) &amp;&amp; $Profile.Name != &quot;System Administrator&quot;</errorConditionFormula>
+    <errorMessage>Risk Score is automatically calculated and cannot be manually modified</errorMessage>
+</ValidationRule>
