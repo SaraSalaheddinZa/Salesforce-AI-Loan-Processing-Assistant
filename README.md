@@ -475,6 +475,3 @@ Future versions could include:
 ## Author
 
 **Sara Salaheddin**
-
-Information Technology and Computing  
-Arab Open University
