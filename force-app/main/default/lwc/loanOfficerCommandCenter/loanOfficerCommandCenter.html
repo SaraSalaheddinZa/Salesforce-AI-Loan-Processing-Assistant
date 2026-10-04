@@ -1,0 +1,624 @@
+<template>
+    <section class={experienceClass}>
+        <section class={heroClass}>
+            <div class="day-environment" aria-hidden="true">
+                <div class="day-glow"></div>
+                <div class="cloud cloud-one">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="cloud cloud-two">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="cloud cloud-three">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <div class="night-environment" aria-hidden="true">
+                <span class="star star-1"></span>
+                <span class="star star-2"></span>
+                <span class="star star-3"></span>
+                <span class="star star-4"></span>
+                <span class="star star-5"></span>
+                <span class="star star-6"></span>
+                <span class="star star-7"></span>
+                <span class="star star-8"></span>
+                <span class="star star-9"></span>
+                <span class="star star-10"></span>
+                <span class="star star-11"></span>
+                <span class="star star-12"></span>
+                <span class="star star-13"></span>
+                <span class="star star-14"></span>
+                <span class="star star-15"></span>
+                <span class="star star-16"></span>
+                <span class="star star-17"></span>
+                <span class="star star-18"></span>
+                <span class="shooting-star"></span>
+            </div>
+            <div class="lamp-zone">
+                <div class="lamp-wire"></div>
+                <button
+                    class="hanging-lamp"
+                    onclick={handleLightToggle}
+                    title={lampStatus}
+                    aria-label={lampStatus}>
+                    <span class="lamp-shade"></span>
+                    <span class="lamp-bulb"></span>
+                </button>
+                <div class="lamp-light" aria-hidden="true"></div>
+                <span class="lamp-caption">
+                    {environmentLabel}
+                </span>
+            </div>
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="live-dot"></span>
+                    Salesforce Loan Operations
+                </div>
+                <h1>
+                    AI-Powered
+                    <span>Loan Processing</span>
+                </h1>
+                <p class="hero-lead">
+                    A simpler way to manage every loan application.
+                </p>
+                <p class="hero-description">
+                    Collect applicant details, review applications and keep every loan moving—all in one Salesforce workspace.
+                </p>
+                <div class="hero-capabilities">
+                    <div class="capability">
+                        <span></span>
+                        Agentforce Assistant
+                    </div>
+                    <div class="capability">
+                        <span></span>
+                        Automated Workflows
+                    </div>
+                    <div class="capability">
+                        <span></span>
+                        Real-Time Portfolio
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <button
+                        class="primary-action"
+                        onclick={handleNewApplication}>
+                        Create Application
+                        <lightning-icon
+                            icon-name="utility:add"
+                            size="xx-small"
+                            variant="inverse">
+                        </lightning-icon>
+                    </button>
+                    <button
+                        class="secondary-action"
+                        onclick={handleViewAll}>
+                        View Applications
+                        <lightning-icon
+                            icon-name="utility:forward"
+                            size="xx-small"
+                            variant="inverse">
+                        </lightning-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="visual-header">
+                    <div>
+                        <span>Portfolio overview</span>
+                        <strong>Today at a glance</strong>
+                    </div>
+                    <div class="visual-live">
+                        <span></span>
+                        Live
+                    </div>
+                </div>
+                <div class="hero-primary-stat">
+                    <span>Total applications</span>
+                    <strong>{totalApplications}</strong>
+                    <p>
+                        Applications currently on file
+                    </p>
+                </div>
+                <div class="hero-stat-grid">
+                    <article>
+                        <span>In review</span>
+                        <strong>{inReviewApplications}</strong>
+                    </article>
+                    <article>
+                        <span>Need attention</span>
+                        <strong>{attentionCount}</strong>
+                    </article>
+                    <article>
+                        <span>Review load</span>
+                        <strong>{reviewPercentage}%</strong>
+                    </article>
+                </div>
+                <div class="mini-pipeline">
+                    <div class="mini-track">
+                        <span></span>
+                    </div>
+                    <div class="mini-stage stage-blue">
+                        <i></i>
+                        <strong>{newApplications}</strong>
+                        <small>New</small>
+                    </div>
+                    <div class="mini-stage stage-purple">
+                        <i></i>
+                        <strong>{submittedApplications}</strong>
+                        <small>Submitted</small>
+                    </div>
+                    <div class="mini-stage stage-amber">
+                        <i></i>
+                        <strong>{inReviewApplications}</strong>
+                        <small>In Review</small>
+                    </div>
+                    <div class="mini-stage stage-green">
+                        <i></i>
+                        <strong>{approvedApplications}</strong>
+                        <small>Approved</small>
+                    </div>
+                </div>
+                <div class="visual-footer">
+                    <div>
+                        <span>Total requested</span>
+                        <strong>
+                            <lightning-formatted-number
+                                value={totalLoanAmount}
+                                format-style="currency"
+                                currency-code="USD"
+                                maximum-fraction-digits="0">
+                            </lightning-formatted-number>
+                        </strong>
+                    </div>
+                    <button
+                        class="visual-refresh"
+                        onclick={handleRefresh}
+                        title="Refresh">
+                        <lightning-icon
+                            icon-name="utility:refresh"
+                            size="xx-small">
+                        </lightning-icon>
+                    </button>
+                </div>
+            </div>
+        </section>
+        <template lwc:if={isLoading}>
+            <div class="loading-state">
+                <lightning-spinner
+                    alternative-text="Loading applications"
+                    size="medium">
+                </lightning-spinner>
+            </div>
+        </template>
+        <template lwc:elseif={hasError}>
+            <div class="error-state">
+                <strong>
+                    Unable to load loan applications.
+                </strong>
+                <p>
+                    Refresh the workspace and try again.
+                </p>
+            </div>
+        </template>
+        <template lwc:else>
+            <section class="workspace">
+                <section class="workspace-intro">
+                    <div>
+                        <span class="section-kicker">
+                            Your workspace
+                        </span>
+                        <h2>
+                            Loan Officer Command Center
+                        </h2>
+                        <p>
+                            Review applications, spot what needs attention,
+                            and keep each loan moving forward.
+                        </p>
+                    </div>
+                    <div class="workspace-actions">
+                        <button
+                            class="workspace-new"
+                            onclick={handleNewApplication}>
+                            <lightning-icon
+                                icon-name="utility:add"
+                                size="xx-small"
+                                variant="inverse">
+                            </lightning-icon>
+                            New application
+                        </button>
+                        <button
+                            class="workspace-refresh"
+                            onclick={handleRefresh}
+                            title="Refresh">
+                            <lightning-icon
+                                icon-name="utility:refresh"
+                                size="xx-small">
+                            </lightning-icon>
+                        </button>
+                    </div>
+                </section>
+                <section class="financial-overview">
+                    <article class="metric metric-primary">
+                        <div class="metric-label">
+                            Total requested
+                            <span></span>
+                        </div>
+                        <strong>
+                            <lightning-formatted-number
+                                value={totalLoanAmount}
+                                format-style="currency"
+                                currency-code="USD">
+                            </lightning-formatted-number>
+                        </strong>
+                        <p>
+                            Across {totalApplications} applications
+                        </p>
+                    </article>
+                    <article class="metric">
+                        <div class="metric-label">
+                            Average application
+                        </div>
+                        <strong>
+                            <lightning-formatted-number
+                                value={averageLoanAmount}
+                                format-style="currency"
+                                currency-code="USD"
+                                maximum-fraction-digits="0">
+                            </lightning-formatted-number>
+                        </strong>
+                        <p>
+                            Average requested loan amount
+                        </p>
+                    </article>
+                    <article class="metric">
+                        <div class="metric-label">
+                            Current review load
+                        </div>
+                        <strong>
+                            {reviewPercentage}%
+                        </strong>
+                        <p>
+                            {inReviewApplications} applications in review
+                        </p>
+                    </article>
+                    <article class="metric">
+                        <div class="metric-label">
+                            Needs attention
+                            <span class="attention-dot"></span>
+                        </div>
+                        <strong>
+                            {attentionCount}
+                        </strong>
+                        <p>
+                            High-value applications to review
+                        </p>
+                    </article>
+                </section>
+                <section class="content-section journey-section">
+                    <div class="section-header">
+                        <div>
+                            <span class="section-kicker">
+                                Loan pipeline
+                            </span>
+                            <h2>
+                                Where Applications Stand
+                            </h2>
+                            <p>
+                                See how applications are moving through the review process.
+                            </p>
+                        </div>
+                        <div class="section-number">
+                            <strong>
+                                {totalApplications}
+                            </strong>
+                            <span>
+                                Total applications
+                            </span>
+                        </div>
+                    </div>
+                    <div class="application-journey">
+                        <div class="journey-track">
+                            <div class="journey-energy"></div>
+                            <div class="journey-traveller"></div>
+                        </div>
+                        <div class="application-stage journey-new">
+                            <div class="application-node">
+                                <span></span>
+                            </div>
+                            <strong>{newApplications}</strong>
+                            <h3>New</h3>
+                            <p>Recently created</p>
+                        </div>
+                        <div class="application-stage journey-submitted">
+                            <div class="application-node">
+                                <span></span>
+                            </div>
+                            <strong>{submittedApplications}</strong>
+                            <h3>Submitted</h3>
+                            <p>Ready for review</p>
+                        </div>
+                        <div class="application-stage journey-review">
+                            <div class="review-halo"></div>
+                            <div class="application-node">
+                                <span></span>
+                                <i></i>
+                            </div>
+                            <strong>{inReviewApplications}</strong>
+                            <h3>In Review</h3>
+                            <p>
+                                {reviewPercentage}% of the portfolio
+                            </p>
+                        </div>
+                        <div class="application-stage journey-approved">
+                            <div class="application-node">
+                                <span></span>
+                            </div>
+                            <strong>{approvedApplications}</strong>
+                            <h3>Approved</h3>
+                            <p>Review completed</p>
+                        </div>
+                    </div>
+                    <div class="rejected-outcome">
+                        <span></span>
+                        <strong>
+                            {rejectedApplications}
+                        </strong>
+                        applications were rejected
+                    </div>
+                </section>
+                <section class="content-section attention-section">
+                    <div class="section-header">
+                        <div>
+                            <span class="section-kicker">
+                                Needs review
+                            </span>
+                            <h2>
+                                Applications Requiring Attention
+                            </h2>
+                            <p>
+                                High-value applications that may need a closer look.
+                            </p>
+                        </div>
+                        <div class="section-number attention-number">
+                            <strong>
+                                {attentionCount}
+                            </strong>
+                            <span>
+                                To review
+                            </span>
+                        </div>
+                    </div>
+                    <template lwc:if={hasAttentionApplications}>
+                        <div class="attention-table">
+                            <div class="attention-table-header">
+                                <span>Applicant</span>
+                                <span>Status</span>
+                                <span>Requested amount</span>
+                                <span></span>
+                            </div>
+                            <template
+                                for:each={attentionApplications}
+                                for:item="application">
+                                <article
+                                    class="attention-row"
+                                    key={application.Id}>
+                                    <div class="applicant-cell">
+                                        <div class="applicant-avatar">
+                                            {application.initials}
+                                        </div>
+                                        <div>
+                                            <button
+                                                class="applicant-name"
+                                                data-id={application.Id}
+                                                onclick={handleOpenRecord}>
+                                                {application.Applicant_Name__c}
+                                            </button>
+                                            <div class="application-meta">
+                                                <span>
+                                                    {application.Name}
+                                                </span>
+                                                <i></i>
+                                                <span>
+                                                    {application.Loan_Type__c}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class={application.statusClass}>
+                                            {application.displayStatus}
+                                        </span>
+                                    </div>
+                                    <div class="amount-cell">
+                                        <strong>
+                                            <lightning-formatted-number
+                                                value={application.Loan_Amount__c}
+                                                format-style="currency"
+                                                currency-code="USD"
+                                                maximum-fraction-digits="0">
+                                            </lightning-formatted-number>
+                                        </strong>
+                                    </div>
+                                    <button
+                                        class="record-action"
+                                        data-id={application.Id}
+                                        onclick={handleOpenRecord}
+                                        title="Open application">
+                                        <lightning-icon
+                                            icon-name="utility:forward"
+                                            size="xx-small">
+                                        </lightning-icon>
+                                    </button>
+                                </article>
+                            </template>
+                        </div>
+                    </template>
+                    <template lwc:else>
+                        <div class="empty-state">
+                            No high-value applications need review right now.
+                        </div>
+                    </template>
+                </section>
+                <section class="content-section recent-section">
+                    <div class="section-header">
+                        <div>
+                            <span class="section-kicker">
+                                Recent activity
+                            </span>
+                            <h2>
+                                Recent Applications
+                            </h2>
+                            <p>
+                                Your latest loan applications, all in one place.
+                            </p>
+                        </div>
+                        <button
+                            class="view-all"
+                            onclick={handleViewAll}>
+                            View all
+                            <lightning-icon
+                                icon-name="utility:forward"
+                                size="xx-small">
+                            </lightning-icon>
+                        </button>
+                    </div>
+                    <template lwc:if={hasRecentApplications}>
+                        <div class="recent-list">
+                            <template
+                                for:each={recentApplications}
+                                for:item="application">
+                                <article
+                                    class="recent-row"
+                                    key={application.Id}>
+                                    <div class="timeline-column">
+                                        <span class="timeline-dot"></span>
+                                        <span class="timeline-line"></span>
+                                    </div>
+                                    <div class="applicant-avatar recent-avatar">
+                                        {application.initials}
+                                    </div>
+                                    <div>
+                                        <button
+                                            class="applicant-name"
+                                            data-id={application.Id}
+                                            onclick={handleOpenRecord}>
+                                            {application.Applicant_Name__c}
+                                        </button>
+                                        <div class="application-meta">
+                                            <span>
+                                                {application.Name}
+                                            </span>
+                                            <i></i>
+                                            <span>
+                                                {application.Loan_Type__c}
+                                            </span>
+                                            <i></i>
+                                            <span class={application.statusClass}>
+                                                {application.displayStatus}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="recent-amount">
+                                        <span>
+                                            Requested
+                                        </span>
+                                        <strong>
+                                            <lightning-formatted-number
+                                                value={application.Loan_Amount__c}
+                                                format-style="currency"
+                                                currency-code="USD"
+                                                maximum-fraction-digits="0">
+                                            </lightning-formatted-number>
+                                        </strong>
+                                    </div>
+                                    <button
+                                        class="record-action"
+                                        data-id={application.Id}
+                                        onclick={handleOpenRecord}
+                                        title="Open application">
+                                        <lightning-icon
+                                            icon-name="utility:forward"
+                                            size="xx-small">
+                                        </lightning-icon>
+                                    </button>
+                                </article>
+                            </template>
+                        </div>
+                    </template>
+                </section>
+            </section>
+        </template>
+    </section>
+    <template lwc:if={showNewApplicationModal}>
+
+        <section
+            role="dialog"
+            tabindex="-1"
+            aria-modal="true"
+            aria-labelledby="loan-modal-title"
+            class="slds-modal slds-fade-in-open">
+
+            <div class="slds-modal__container">
+
+                <header class="slds-modal__header modal-header">
+
+                    <button
+                        class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close"
+                        onclick={handleCloseNewApplication}>
+
+                        <lightning-icon
+                            icon-name="utility:close"
+                            alternative-text="Close"
+                            variant="inverse"
+                            size="small">
+                        </lightning-icon>
+
+                        <span class="slds-assistive-text">
+                            Close
+                        </span>
+
+                    </button>
+
+
+                    <p>Loan application</p>
+
+                    <h2
+                        id="loan-modal-title"
+                        class="slds-text-heading_medium">
+
+                        Create a new application
+
+                    </h2>
+
+                    <span>
+                        Enter the applicant and requested loan details.
+                    </span>
+
+                </header>
+
+
+                <div
+                    class="slds-modal__content slds-p-around_large modal-content">
+
+                    <lightning-flow
+                        flow-api-name="Create_Loan_Application_Screen_Flow"
+                        onstatuschange={handleFlowStatusChange}>
+                    </lightning-flow>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <div class="slds-backdrop slds-backdrop_open"></div>
+
+    </template>
+</template>

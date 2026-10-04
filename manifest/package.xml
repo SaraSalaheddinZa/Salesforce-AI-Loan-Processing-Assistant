@@ -17,13 +17,22 @@
     <types>
         <members>Loan_Application_Record_Page</members>
         <members>Loan_Processing_Assistant_UtilityBar</members>
+        <members>Home_Page_Default1</members>
         <name>FlexiPage</name>
     </types>
 
-    <!-- Custom Lightning Web Component -->
+    <!-- Custom Lightning Web Components -->
     <types>
         <members>loanProgressTracker</members>
+        <members>loanOfficerCommandCenter</members>
         <name>LightningComponentBundle</name>
+    </types>
+
+    <!-- Apex -->
+    <types>
+        <members>LoanOfficerCommandCenterController</members>
+        <members>LoanOfficerCommandCenterControllerTest</members>
+        <name>ApexClass</name>
     </types>
 
     <!-- Salesforce Flows -->
