@@ -1,30 +1,78 @@
 # AI-Powered Loan Processing Assistant
 
-An end-to-end loan processing solution built on Salesforce that combines **Agentforce, Salesforce Flow, Lightning Experience, Dynamic Forms, Lightning Web Components (LWC), Apex, validation rules, reports, and dashboards**.
+A Salesforce loan processing application that combines Agentforce, Salesforce Flow, Lightning Web Components, Apex, Dynamic Forms, reports, and dashboards.
 
-The project demonstrates how Salesforce automation, conversational AI, and custom development can work together to streamline loan application intake, support loan officers, automate record creation, and provide a centralized workspace for managing loan applications.
+I built this project to explore how Salesforce automation and conversational AI can work together in a loan processing workflow. The application supports loan intake, record creation, application tracking, high-value application review, and portfolio monitoring from one Salesforce workspace.
 
 ---
 
 ## Overview
 
-Loan processing often involves repetitive data collection, manual record creation, and multiple processing steps.
+The AI-Powered Loan Processing Assistant provides two ways to create a loan application:
 
-The **AI-Powered Loan Processing Assistant** provides a centralized Salesforce solution that supports:
+- A guided Salesforce Screen Flow
+- A conversational experience through Agentforce
 
-- Conversational loan application intake through Agentforce
-- Guided loan application creation through Screen Flow
-- Automated record creation using Salesforce Flow
-- High-value loan processing automation
-- Dynamic Lightning record experiences
-- A custom Loan Officer Command Center
-- Real-time portfolio metrics and application monitoring
-- Applications requiring attention
-- Real-time application progress tracking
-- Interactive light and dark workspace modes
-- Salesforce reports and dashboard analytics
+Both paths create records in the custom `Loan_Application__c` object.
 
-The solution combines declarative Salesforce automation with custom Lightning Web Components and Apex to provide both **portfolio-level visibility** and **record-level application tracking**.
+Loan officers can then review applications through the Salesforce record page, monitor individual application progress, and use the custom Loan Officer Command Center to see the overall loan portfolio.
+
+The project includes:
+
+- Agentforce loan application intake
+- Salesforce Screen Flow
+- Agentforce-to-Flow integration
+- Record-triggered automation
+- Dynamic Lightning record pages
+- Custom Lightning Web Components
+- Apex data aggregation
+- Light and dark workspace modes
+- Salesforce reports and dashboards
+- Validation and data protection rules
+
+---
+
+## Project Showcase
+
+### Loan Officer Command Center
+
+I built a custom Loan Officer Command Center for the Salesforce Home Page. It gives loan officers a quick view of the current portfolio, application pipeline, high-value applications that need attention, and recent applications.
+
+![Loan Officer Command Center - Light Mode](docs/screenshots/01-command-center-light.png)
+
+The Command Center also includes a dark workspace mode.
+
+![Loan Officer Command Center - Dark Mode](docs/screenshots/02-command-center-dark.png)
+
+### Loan Application Record
+
+Each Loan Application record brings together applicant details, loan information, application status, and application tracking.
+
+![Loan Application Record](docs/screenshots/03-loan-application-record.png)
+
+### Create Loan Application Flow
+
+A new application can be created directly from the Command Center using the Create Loan Application Screen Flow.
+
+![Create Loan Application Screen Flow](docs/screenshots/04-create-loan-flow.png)
+
+### Agentforce Integration
+
+The Loan Assistant Agent includes a `Collect Applicant Information` subagent and a `Create Loan Application` action.
+
+The action is connected to an active autolaunched Salesforce Flow.
+
+![Agentforce Flow Integration](docs/screenshots/05-agentforce-configuration.png)
+
+The Agentforce preview shows the assistant collecting applicant information, confirming the details with the user, and invoking the Create Loan Application action.
+
+![Loan Assistant Agent Test](docs/screenshots/06-agentforce-test.png)
+
+### Reports and Dashboard
+
+The project also uses native Salesforce reporting for portfolio analysis.
+
+![Loan Processing Overview Dashboard](docs/screenshots/07-reports-dashboard.png)
 
 ---
 
@@ -48,7 +96,7 @@ The solution combines declarative Salesforce automation with custom Lightning We
              Information                             │
                    │                                 │
                    ▼                                 │
-            User Confirmation                        │
+           User Confirmation                         │
                    │                                 │
                    ▼                                 │
         Create Loan Application                      │
@@ -58,6 +106,7 @@ The solution combines declarative Salesforce automation with custom Lightning We
           Autolaunched Flow                          │
                    │                                 │
                    └────────────────┬────────────────┘
+                                    │
                                     ▼
                          ┌──────────────────────┐
                          │ Loan_Application__c  │
@@ -66,61 +115,55 @@ The solution combines declarative Salesforce automation with custom Lightning We
               ┌─────────────────────┼─────────────────────┐
               │                     │                     │
               ▼                     ▼                     ▼
-      Record-Triggered       Lightning Record       Reports &
-           Flow                   Page              Dashboard
+      Record-Triggered        Lightning Experience     Reports &
+           Flow                                      Dashboard
                                     │
-                                    ▼
-                          Loan Progress Tracker
-                               Custom LWC
-
-                                    │
-                                    ▼
-                     Loan Officer Command Center
-                          Custom LWC + Apex
+                    ┌───────────────┴───────────────┐
+                    │                               │
+                    ▼                               ▼
+          Loan Officer                    Loan Progress
+         Command Center                      Tracker
+          LWC + Apex                       Custom LWC
 ```
 
-The Salesforce experience is complemented by the **Loan Officer Command Center**, which uses a custom Lightning Web Component and Apex controller to provide portfolio-level operational visibility alongside the record-level Loan Progress Tracker.
+The custom Loan Application object acts as the shared data layer between Agentforce, Salesforce Flow, Apex, Lightning Web Components, and Salesforce analytics.
 
 ---
 
 ## Agentforce — Loan Assistant Agent
 
-The solution includes a Salesforce Agentforce assistant that provides a conversational interface for loan-related interactions.
+The project includes a Salesforce Agentforce assistant for loan application intake and general loan guidance.
 
 ### Collect Applicant Information
 
-The **Collect Applicant Information** topic is used when a user wants to submit a new loan application.
+The `Collect Applicant Information` subagent is used when someone wants to submit a new loan application.
 
-The agent collects:
+It collects:
 
 - Applicant full name
 - Contact email
 - Requested loan amount
 - Loan type
 
-The agent is configured to:
-
-- Validate that the requested loan amount is positive
-- Avoid assuming missing applicant information
-- Ask specifically for required missing information
-- Summarize the collected information
-- Request confirmation before creating the application
+The agent is instructed to validate the loan amount, ask for missing required information, summarize the collected details, and request confirmation before creating the application.
 
 ### Create Loan Application Action
 
-After the user confirms the collected information, Agentforce invokes the:
+After confirmation, Agentforce invokes the:
 
-**Create Loan Application**
+```text
+Create Loan Application
+```
 
 action.
 
-The action connects Agentforce to the active autolaunched Salesforce Flow:
+The action is connected to:
 
 ```text
 Agentforce_Autolaunched_Create_Loan_Application1
 ```
 
-The following information is passed to the Flow:
+The following values are passed to the Flow:
 
 ```text
 varApplicantName
@@ -135,7 +178,7 @@ The Flow creates the Loan Application record and returns:
 varLoanApplicationId
 ```
 
-### Agentforce Integration Flow
+The interaction follows this path:
 
 ```text
 User
@@ -148,39 +191,39 @@ Validate Required Information
   ↓
 User Confirmation
   ↓
-Create Loan Application Action
+Create Loan Application
   ↓
-Autolaunched Salesforce Flow
+Autolaunched Flow
   ↓
 Loan_Application__c
 ```
 
 ### Loan Inquiry
 
-The **Loan Inquiry** topic provides general guidance about the loan types supported by the solution:
+The `Loan Inquiry` subagent provides general guidance about the loan types supported by the project:
 
-- Personal Loan
-- Home Loan
-- Auto Loan
-- Business Loan
+- Personal
+- Home
+- Auto
+- Business
 
-The agent is instructed not to invent specific eligibility requirements, interest rates, fees, or approval decisions that are not available in the system.
+The agent is instructed not to invent interest rates, fees, eligibility requirements, or approval decisions that are not available to it.
 
 ### Agentforce Metadata
 
-The Agentforce configuration is stored in the Salesforce metadata project under:
+The Agentforce configuration is included in the Salesforce DX project under:
 
 ```text
 force-app/main/default/genAiPlannerBundles/Loan_Assistant_Agent_v1/
 ```
 
-The retrieved Planner Bundle contains the agent definition, agent graph, and supporting local actions required by the Agentforce configuration.
+The Planner Bundle contains the agent definition, graph, and supporting local actions required by the Agentforce configuration.
 
 ---
 
 ## Loan Application Data Model
 
-The solution is centered around the custom Salesforce object:
+The main Salesforce object is:
 
 ```text
 Loan_Application__c
@@ -219,15 +262,13 @@ New → Submitted → In Review → Approved
 
 ## Salesforce Automation
 
-The project uses Salesforce Flow Builder for application intake, Agentforce integration, and automated loan processing.
-
 ### Create Loan Application Screen Flow
 
 ```text
 Create_Loan_Application_Screen_Flow
 ```
 
-The active Screen Flow provides a guided interface for creating a Loan Application.
+The Screen Flow provides a guided way to create a Loan Application.
 
 It collects:
 
@@ -236,15 +277,15 @@ It collects:
 - Requested Loan Amount
 - Loan Type
 
-The Flow creates a `Loan_Application__c` record and sets its initial application status to:
+The Flow creates a `Loan_Application__c` record with an initial application status of:
 
 ```text
 New
 ```
 
-After the record is created, a confirmation screen displays the generated record ID.
+After creation, the Flow displays a confirmation screen with the generated record ID.
 
-The Screen Flow is also integrated directly into the **Loan Officer Command Center**, allowing a user to begin a new application from the main workspace.
+The same Screen Flow can be launched directly from the Loan Officer Command Center.
 
 ### Agentforce Autolaunched Flow
 
@@ -252,9 +293,9 @@ The Screen Flow is also integrated directly into the **Loan Officer Command Cent
 Agentforce_Autolaunched_Create_Loan_Application1
 ```
 
-This active Autolaunched Flow provides the automation layer between Agentforce and Salesforce.
+This Flow connects the Agentforce action to Salesforce record creation.
 
-Agentforce passes the collected applicant information to the Flow, and the Flow creates the corresponding Loan Application record.
+It receives the applicant information collected during the Agentforce conversation and creates the corresponding Loan Application record.
 
 ### High-Value Loan Automation
 
@@ -262,21 +303,19 @@ Agentforce passes the collected applicant information to the Flow, and the Flow 
 Loan_Application_Auto_Update_High_Value_Status
 ```
 
-An active Record-Triggered Flow monitors Loan Application records.
+This record-triggered Flow handles high-value applications.
 
-Loan requests of **100,000 or more** are automatically moved into the review process by updating their application status.
+Loan requests of `100,000` or more are moved into the review process through an application status update.
 
 ---
 
 ## Lightning Experience
 
-The project includes the custom Lightning application:
+The project includes the custom Salesforce application:
 
 ```text
 Loan Processing Assistant
 ```
-
-It provides a centralized workspace for working with loan applications and related analytics.
 
 ### Loan Application Record Page
 
@@ -286,40 +325,37 @@ The custom:
 Loan Application Record Page
 ```
 
-organizes application information into structured sections including:
+organizes the record into sections such as:
 
-**Applicant & Financial Details**
+- Applicant & Financial Details
+- Loan Details
 
-and:
-
-**Loan Details**
-
-Dynamic Forms and visibility rules are used to create a more contextual record experience.
+Dynamic Forms and visibility rules are used to make the record page more contextual.
 
 ### Salesforce Home Page
 
-The solution also includes a customized Salesforce Home Page:
+The project also includes the custom Home Page:
 
 ```text
 Home_Page_Default1
 ```
 
-The page hosts the custom **Loan Officer Command Center** together with Salesforce reporting components to provide an operational overview of loan activity.
+This page hosts the Loan Officer Command Center together with native Salesforce reporting components.
 
 ---
 
 ## Loan Officer Command Center
 
-The Salesforce Home Page includes a custom **Loan Officer Command Center** built with Lightning Web Components and Apex.
+The Loan Officer Command Center is a custom Lightning Web Component backed by Apex.
 
-It provides loan officers with a centralized operational view of the current loan portfolio without requiring them to navigate across multiple records and reports.
+I added it to give loan officers a single place to monitor the loan portfolio instead of opening individual records or reports for every check.
 
 ### Portfolio Overview
 
-The Command Center provides real-time portfolio metrics including:
+The workspace displays:
 
 - Total applications
-- Total requested loan amount
+- Total requested amount
 - Average loan amount
 - New applications
 - Submitted applications
@@ -329,89 +365,76 @@ The Command Center provides real-time portfolio metrics including:
 
 ### Application Journey
 
-The Command Center provides a visual representation of the application pipeline:
+The application pipeline is displayed visually:
 
 ```text
 New → Submitted → In Review → Approved
                          ↘ Rejected
 ```
 
-This gives users a quick view of where applications currently stand in the processing lifecycle.
-
 ### Applications Requiring Attention
 
-The workspace includes a dedicated **Needs Your Attention** section.
+The `Needs Your Attention` section surfaces active applications with requested loan amounts of `100,000` or more for closer review.
 
-Active applications with loan amounts of **100,000 or more** can be surfaced for closer review, helping loan officers identify high-value applications that may require attention.
+This is workflow prioritization, not an automated lending decision.
 
 ### Recent Applications
 
-The **Recent Applications** section provides quick access to recently created Loan Application records.
+The recent applications section lets a loan officer quickly see:
 
-Users can:
+- Recent records
+- Current status
+- Requested amount
+- Loan type
 
-- Review recent application information
-- See application status
-- See requested loan amounts
-- Navigate directly to individual Loan Application records
-- Open the full Loan Applications list
+Users can also navigate directly to a Loan Application record or open the full Loan Applications list.
 
 ### Create Application
 
-The Command Center includes a **Create Application** action.
-
-Selecting the action opens the existing Salesforce Screen Flow directly inside the workspace, allowing a new Loan Application to be created without leaving the Command Center.
+The Command Center can launch the existing Create Loan Application Screen Flow without leaving the workspace.
 
 ### Refresh
 
-A refresh action allows users to request the latest portfolio data from Salesforce.
+The refresh action retrieves the latest portfolio data from Salesforce.
 
 ---
 
 ## Interactive Workspace
 
-The Loan Officer Command Center includes an interactive day and night workspace experience.
-
-A custom lamp control switches the interface between light and dark modes while preserving the same underlying Salesforce data and functionality.
+The Command Center includes light and dark workspace modes controlled by a custom lamp interaction.
 
 The visual experience includes:
 
-- Light workspace mode
-- Dark workspace mode
-- Interactive CSS-based lamp
+- Light workspace
+- Dark workspace
+- CSS-based lamp
 - Animated daytime clouds
 - Night sky and star effects
 - Shooting-star animation
 - Responsive layout behavior
 - Reduced-motion support
 
-The visual mode is implemented within the custom LWC. Standard Salesforce report components displayed outside the component retain their native Salesforce styling.
+The theme applies to the custom LWC. Native Salesforce report components remain styled by Salesforce.
 
 ---
 
 ## Custom Lightning Web Components
 
-The solution includes two custom Lightning Web Components serving different parts of the loan processing experience.
+Two custom LWCs are included in the project.
 
-### Loan Officer Command Center
+### `loanOfficerCommandCenter`
 
-```text
-loanOfficerCommandCenter
-```
+The main portfolio workspace.
 
-The Command Center provides the main operational workspace for loan officers.
-
-It retrieves Loan Application data through a custom Apex controller and presents:
+It uses Apex to retrieve and display:
 
 - Portfolio metrics
-- Application status distribution
+- Application status information
 - Application pipeline
 - High-value applications requiring attention
-- Recent application activity
+- Recent applications
 
-It also provides navigation and integrates the **Create Loan Application Screen Flow** directly into the interface.
-
-Component files:
+It also handles record navigation, refresh behavior, and Screen Flow launch.
 
 ```text
 loanOfficerCommandCenter/
@@ -421,19 +444,15 @@ loanOfficerCommandCenter/
 └── loanOfficerCommandCenter.js-meta.xml
 ```
 
-### Loan Progress Tracker
+### `loanProgressTracker`
+
+The record-level tracking component displayed as:
 
 ```text
-loanProgressTracker
+Loan Application Tracker (Custom LWC)
 ```
 
-The component is displayed as:
-
-**Loan Application Tracker (Custom LWC)**
-
-It is placed on the Loan Application record page and provides a visual representation of the application's current status.
-
-Component files:
+It provides a visual view of application status from the Loan Application record page.
 
 ```text
 loanProgressTracker/
@@ -442,42 +461,40 @@ loanProgressTracker/
 └── loanProgressTracker.js-meta.xml
 ```
 
-Together, the two components provide both portfolio-level visibility and record-level application progress tracking.
+Together, the two components provide portfolio-level monitoring and record-level tracking.
 
 ---
 
 ## Apex Integration
 
-The Loan Officer Command Center uses a custom Apex controller:
+The Loan Officer Command Center uses:
 
 ```text
 LoanOfficerCommandCenterController
 ```
 
-The controller aggregates Loan Application data required by the LWC, including:
+The controller provides the portfolio data needed by the LWC, including:
 
 - Total applications
-- Application counts by status
-- Total requested loan amount
+- Counts by application status
+- Total requested amount
 - Average loan amount
 - Applications requiring attention
 - Recent applications
 
-A dedicated Apex test class is included:
+The project also includes:
 
 ```text
 LoanOfficerCommandCenterControllerTest
 ```
 
-The final Apex test run completed successfully with:
+The final Apex test run completed with:
 
 ```text
 Tests Ran: 2
 Pass Rate: 100%
 Fail Rate: 0%
 ```
-
-This provides automated verification of the core server-side data logic used by the Command Center.
 
 ---
 
@@ -489,84 +506,94 @@ The project includes the validation rule:
 Prevent_Manual_Risk_Score_Edit
 ```
 
-The rule protects `Risk_Score__c` from unauthorized manual modification.
+It protects `Risk_Score__c` from unauthorized manual changes and helps keep system-managed information consistent.
 
-This helps maintain the integrity of system-managed loan information.
-
-Salesforce access controls and field-level security can also be used to restrict access to sensitive application information.
+Additional Salesforce access controls and field-level security can be used to control access to sensitive application data according to user responsibilities.
 
 ---
 
 ## Reports & Dashboard
 
-The solution includes Salesforce reports and a dashboard for monitoring Loan Application data.
+The project uses native Salesforce reports alongside the custom Command Center.
 
 ### Reports
 
-**Loan Applications by Loan Type**
+#### Loan Applications by Loan Type
 
 ```text
 Loan_Applications_by_Loan_Type_0KE
 ```
 
-Provides visibility into applications grouped by loan type.
+Shows Loan Application data grouped by loan type.
 
-**New Loan Applications Report**
+#### New Loan Applications Report
 
 ```text
 New_Loan_Applications_Report_nBu
 ```
 
-Provides visibility into newly created Loan Applications.
-
-These standard Salesforce reporting components complement the custom Command Center and demonstrate the use of both native Salesforce analytics and custom application development.
+Provides a status-based view of Loan Application records and is used by the dashboard.
 
 ### Dashboard
 
-**Loan Processing Overview**
+The:
 
-The dashboard provides a visual overview of Loan Application data using Salesforce report data.
+```text
+Loan Processing Overview
+```
+
+dashboard provides visual analysis of application status and loan type using Salesforce report data.
 
 ---
 
 ## Testing
 
-The main solution workflows and custom components were tested across:
+I tested the main application paths across:
 
-- Screen Flow loan application creation
+- Screen Flow application creation
 - Agentforce applicant information collection
-- Agentforce user confirmation
+- Agentforce confirmation
 - Agentforce-to-Flow integration
 - Loan Application record creation
-- High-value loan automation
-- Loan Progress Tracker display
-- Loan Officer Command Center data retrieval
-- Apex controller aggregation logic
-- High-value application attention logic
-- Command Center record navigation
-- Command Center refresh behavior
+- High-value application automation
+- Loan Officer Command Center
+- Loan Progress Tracker
+- Record navigation
+- Command Center refresh
 - Screen Flow launch from the Command Center
 - Validation rule behavior
-- Reports and dashboard visibility
+- Reports and dashboard
 
-The Apex controller test suite completed successfully with a **100% pass rate**, with **2 tests executed and 0 failures**.
+The Apex test suite completed with:
+
+```text
+2 tests
+100% pass rate
+0 failures
+```
+
+More detailed testing notes are available in:
+
+```text
+docs/testing.md
+```
 
 ---
 
 ## Technology Stack
 
-| Technology | Purpose |
+| Technology | Use |
 |---|---|
 | Salesforce Platform | Core application platform |
 | Salesforce Agentforce | Conversational loan assistant |
-| Salesforce Flow Builder | Application intake and process automation |
-| Lightning App Builder | Application, Home Page, and record page configuration |
+| Salesforce Flow Builder | Intake and workflow automation |
+| Lightning App Builder | Home and record page configuration |
 | Dynamic Forms | Contextual record experience |
-| Lightning Web Components | Command Center and application progress tracking |
-| Apex | Server-side portfolio data aggregation |
+| Lightning Web Components | Custom UI and application tracking |
+| Apex | Server-side data aggregation |
 | Salesforce Reports | Loan data analysis |
-| Salesforce Dashboards | Visual monitoring |
-| Salesforce CLI | Metadata retrieval, deployment, and project management |
+| Salesforce Dashboards | Portfolio visualization |
+| Salesforce CLI | Metadata retrieval and deployment |
 | Salesforce DX | Source-driven project structure |
 | Git | Version control |
 | GitHub | Source repository |
@@ -625,25 +652,25 @@ force-app/main/default/
     └── unfiled$public/
 ```
 
+Additional project documentation is available in:
+
+```text
+docs/
+├── architecture.md
+├── security.md
+├── testing.md
+└── screenshots/
+```
+
 ---
 
-## Responsible AI & Project Scope
+## Responsible AI & Scope
 
-This project demonstrates how conversational AI can support loan intake and Salesforce workflow automation.
+Agentforce is used to guide the conversation, collect structured information, request confirmation, and trigger Salesforce automation.
 
-Agentforce is used to:
+It is not used to independently determine creditworthiness or make real-world lending decisions.
 
-- Guide users through loan-related interactions
-- Collect structured applicant information
-- Validate required conversational inputs
-- Request user confirmation
-- Trigger Salesforce automation
-
-The project does **not** represent a production credit decision engine.
-
-Agentforce is not used to independently determine creditworthiness or autonomously make real-world lending decisions.
-
-The current scope does not include:
+The current project does not include:
 
 - External credit bureau integration
 - Production credit scoring
@@ -651,22 +678,22 @@ The current scope does not include:
 - Core banking integration
 - Predictive lending models
 
-Production deployment of these capabilities would require additional security, compliance, governance, validation, and human oversight.
+A production lending system would require additional security, regulatory compliance, governance, validation, and human oversight.
 
 ---
 
 ## Future Enhancements
 
-Future versions could include:
+Possible next steps for the project include:
 
-- External credit bureau API integration
+- Credit bureau API integration
 - Document upload and verification
 - Loan officer notifications
-- Enhanced review workflows
+- More advanced review workflows
 - Additional Agentforce actions
-- Expanded reporting and analytics
+- Expanded analytics
 - External banking system integration
-- Advanced risk assessment models
+- Advanced risk assessment
 
 ---
 
